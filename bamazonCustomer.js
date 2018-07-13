@@ -1,89 +1,79 @@
 var mysql = require("mysql");
-var inquirer = require("inquirer")
+var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
     host: "localhost",
-
-    // Your port; if not 3306
     port: 3306,
-
-    // Your username
     user: "root",
-
-    // Your password
     password: "",
-    database: "bamazon"
+    database: "Bamazon"
 });
 
-connection.connect(function (err) {
+connection.connect(function(err) {
     if (err) throw err;
-   
-    displayProducts();
+    console.log("connected as id" + connection.threadId);
+
 });
 
-function displayProducts(){
-    connection.query("SELECT * FROM products", function (err, results) {
-        console.log(results);
-    });
-}
+connection.query("SELECT * FROM products", function(err, res) {
 
+    console.log("Welcome to Bamazon!");
+    for (var i = 0; i < res.length; i++) {
+        console.log("Item ID: " + res[i].item_id + "\nName of Product: " + res[i].product_name + "\nPrice: " + "$" + res[i].price + "\n=======================");
+    }
+});
 
-function start() {
+connection.query("SELECT * FROM products", function(err, res) {
+    if (err) throw err;
 
-    inquirer.prompt
-            ({
-                type: 'input',
-                name: 'item',
-                message: "What is the number id of the product you would like to buy?"
+    inquirer.prompt([{
+        name: "productList",
+        list: function() {
+            var productsArr = [];
+            for (var i = 0; i < res.length; i++) {
+                productsArr.push(res[i].item_id);
+            }
+            return productsArr;
+        },
+        message: "What would you like to buy? (Please type in the Item ID).",
+    }, {
+        name: "unitNum",
+        message: "How many would you like to buy?",
 
-            }).then(function(res){
-                connection.query("SELECT * FROM products", function(err, results){
-                    console.log(results);
-                });
+    }]).then(function(custAnswer) {
 
-            });
+        // stores the customer's answer to a var
+        var custChoiceID = custAnswer.productList.trim();
 
-}
+        //gets the index of the item choice
+        var arrNum = custChoiceID - 1;
 
-function placeOrder(){
-    inquirer.prompt
-        ({
-            type: 'input',
-            name: 'item',
-            message: "How many of the units do you want to buy?"
+        var chosenProduct = res[arrNum];
 
-        }).then(function (res) {
-            connection.query("SELECT * FROM products", function (err, results) {
-                console.log(results);
+        //shows the customer which product they chose
+        console.log("You chose:  " + custChoiceID + " | " + chosenProduct.product_name);
+
+        //how many the customer would like to purchase 
+        var unitNum = custAnswer.unitNum.trim();
+        console.log("# of items you wanted to purchase: " + unitNum);
+
+        //num of stocks available in store
+        var itemStocks = chosenProduct.stock_quantity;
+
+        if (unitNum < chosenProduct.stock_quantity) {
+            var newQuantity = chosenProduct.stock_quantity - unitNum
+
+            connection.query("UPDATE products SET ? WHERE ?", [{
+                stock_quantity: newQuantity
+            }, {
+                item_id: chosenProduct.item_id
+            }], function(err) {
+                if (err) throw err;
+                console.log("Your order has been placed!");
+                console.log("Total cost: $" + (unitNum * chosenProduct.price));
             })
-
-        })
-}
-
-//         OrderQuantity: [
-//             {
-//                 type: 'input',
-//                 name: 'quantity',
-//                 message: "How many units of the product would you like to buy?"
-//             }],
-
-//     }
-//     displayTable()
-//     inquirer.prompt(messages.itemNumber).then(function (answers) {
-//         console.log(answers)
-//     })
-// }
-
-// function start() {
-//     displayTable()
-//     inquirer.prompt(messages.OrderQuantity).then(function (answers) {
-//         console.log(answers)
-//     })
-// }
-
-// function displayTable() {
-//     connection.query("SELECT * FROM products", function (err, results) {
-//         if (err) throw err;
-//         console.log(results)
-// }
-//     )}
+        } else {
+        	console.log("Insufficient quantity. You tried....Maybe next time."); 
+        };
+    });
+});

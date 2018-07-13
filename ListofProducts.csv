@@ -1,0 +1,11 @@
+item_id,product_name,department_name,price,stock_quantity
+1,MacBook Pro,Technology,1000,10
+2,MacBook Air,Technology,980,10
+3,Massage Chair,Home,500,5
+4,Air Hockey Table,Games,200,8
+5,Pool Table,Games,200,8
+6,White NMDS,Shoes,100,3
+7,Speakers,Technology,50,6
+8,Drawing Tablet,Technology,80,9
+9,Hoverboard,Games,75,20
+10,Basketball Arcade Game,Games,500,10

@@ -1,0 +1,21 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "An Amazon-like storefront that takes in orders from customers and depletes stock from the store's inventory. ",
+  "main": "bamazonCustomer.js",
+  "dependencies": {
+    "inquirer": "^3.0.6",
+    "mysql": "^2.13.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node bamazonCustomer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joycetio/Bamazon.git"
+  },
+  "author": "Joyce Tio",
+  "license": "ISC",
+  "homepage": "https://github.com/joycetio/Bamazon#readme"
+}
