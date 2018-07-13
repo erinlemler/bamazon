@@ -13,9 +13,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joycetio/Bamazon.git"
+    "url": "https://github.com/erinlemler/bamazon.git"
   },
-  "author": "Joyce Tio",
+  "author": "Erin Lemler",
   "license": "ISC",
-  "homepage": "https://github.com/joycetio/Bamazon#readme"
+  "homepage": "https://github.com/erinlemler/bamazon.git"
 }
